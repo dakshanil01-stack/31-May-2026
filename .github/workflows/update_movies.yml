@@ -7,6 +7,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: # YEH PART ADD KARO
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -27,3 +34,4 @@ jobs:
           git add movies.json
           git commit -m "Update movies list" -a || echo "No changes to commit"
           git push
+          
