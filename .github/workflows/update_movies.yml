@@ -7,13 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions: # YEH PART ADD KARO
-      contents: write
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-  build:
-    runs-on: ubuntu-latest
+    permissions:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
