@@ -1,19 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .movie-card:hover { transform: scale(1.05); transition: 0.3s; }
+    </style>
 </head>
-<body class="bg-black text-white p-5">
-    <div id="grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+<body class="bg-black text-white">
+    <header class="p-6 flex justify-between items-center border-b border-gray-800">
+        <h1 class="text-2xl font-bold text-red-600 uppercase">RogMovies Clone</h1>
+        <input type="text" id="search" placeholder="Search Movies..." class="bg-gray-800 p-2 rounded text-white outline-none">
+    </header>
+
+    <div id="grid" class="grid grid-cols-2 md:grid-cols-5 gap-6 p-6"></div>
+
     <script>
+        let allMovies = [];
         fetch('movies.json').then(r => r.json()).then(data => {
+            allMovies = data;
+            render(data);
+        });
+
+        function render(data) {
             document.getElementById('grid').innerHTML = data.map(m => `
-                <div class="bg-gray-900 p-2 rounded">
-                    <img src="${m.poster}" class="w-full">
-                    <h2 class="font-bold mt-2">${m.title}</h2>
-                    <p>${m.year}</p>
+                <div class="movie-card bg-gray-900 rounded-lg overflow-hidden border border-gray-700 cursor-pointer" onclick="alert('Details for: ${m.title}')">
+                    <img src="${m.poster}" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h2 class="font-bold truncate">${m.title}</h2>
+                        <p class="text-gray-400 text-sm">${m.year}</p>
+                        <button class="mt-3 w-full bg-red-600 py-2 rounded font-bold">Download</button>
+                    </div>
                 </div>
             `).join('');
+        }
+
+        // Search Logic
+        document.getElementById('search').addEventListener('input', (e) => {
+            const filtered = allMovies.filter(m => m.title.toLowerCase().includes(e.target.value.toLowerCase()));
+            render(filtered);
         });
     </script>
 </body>
