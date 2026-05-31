@@ -3,22 +3,34 @@ on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4  # v3 se v4 kar diya
-      - uses: actions/setup-python@v5 # v4 se v5 kar diya
-        with: {python-version: '3.9'}
-      - run: pip install requests
-      - run: python fetch_movies.py
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      
+      - name: Install dependencies
+        run: pip install requests
+      
+      - name: Run Fetch Script
         env:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
-      - run: |
+        run: python fetch_movies.py
+      
+      - name: Commit and Push Changes
+        run: |
           git config --global user.name "bot"
           git config --global user.email "bot@bot.com"
           git add movies.json
-          git commit -m "Auto Update"
-          git push
+          # Ye line check karegi ki file badli hai ya nahi
+          git diff --quiet && echo "No changes to commit" || (git commit -m "Auto Update Movies" && git push)
