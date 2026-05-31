@@ -9,8 +9,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4  # v3 se v4 kar diya
+      - uses: actions/setup-python@v5 # v4 se v5 kar diya
         with: {python-version: '3.9'}
       - run: pip install requests
       - run: python fetch_movies.py
